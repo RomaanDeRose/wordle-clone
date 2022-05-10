@@ -6,16 +6,32 @@ function App() {
   const [word, setWord] = useState("");
   const [attemps, setAttemps] = useState([]);
   const [lifes, setLifes] = useState(5);
-  const [reset, setreset] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [result, setResult] = useState("");
   const wordInput = useRef(null);
 
   const handleSubmitWord = (e) => {
     e.preventDefault();
-    setAttemps([...attemps, wordInput.current.value.toUpperCase().split()]);
-    setLifes(lifes - 1);
-    if (wordInput.current.value.toUpperCase() === word) {
-      setreset(true);
-      toast.success("Acertaste!");
+    if (lifes > 1) {
+      setAttemps([...attemps, wordInput.current.value.toUpperCase().split()]);
+      setLifes(lifes - 1);
+      if (wordInput.current.value.toUpperCase() === word) {
+        setReset(true);
+        setResult("win");
+        toast.success("Acertaste!", {
+          style: {
+            background: "#86EFAC",
+          },
+        });
+      }
+    } else {
+      setReset(true);
+      setResult("lose");
+      toast.error("Perdiste!", {
+        style: {
+          background: "#F87171",
+        },
+      });
     }
     wordInput.current.value = "";
   };
@@ -48,24 +64,7 @@ function App() {
         <span className="text-yellow-300 font-extrabold text-xl">{lifes}</span>{" "}
         intentos para adivinar la palabra!
       </p>
-      <div className="w-4/5 max-w-sm h-auto mx-auto">
-        {/* <div className="w-full h-10 mb-5 flex gap-2">
-          <p className="w-1/5 h-full border-2 bg-green-600 border-gray-600 text-white font-bold text-xl rounded-lg text-center leading-8">
-            R
-          </p>
-          <p className=" w-1/5 h-full border-2 bg-gray-600 border-gray-600 text-white font-bold text-xl rounded-lg text-center leading-8">
-            O
-          </p>
-          <p className=" w-1/5 h-full border-2 bg-amber-500 border-gray-600 text-white font-bold text-xl rounded-lg text-center leading-8">
-            M
-          </p>
-          <p className=" w-1/5 h-full border-2 bg-gray-600 border-gray-600 text-white font-bold text-xl rounded-lg text-center leading-8">
-            A
-          </p>
-          <p className=" w-1/5 h-full border-2 bg-gray-600 border-gray-600 text-white font-bold text-xl rounded-lg text-center leading-8">
-            N
-          </p>
-        </div> */}
+      <div className="w-4/5 max-w-xs h-auto mx-auto">
         {attemps.map((attemp, index) => (
           <div key={index} className="w-full h-10 mb-5 flex gap-2">
             <p
@@ -146,14 +145,27 @@ function App() {
           </button>
         </div>
       )}
+      {result === "win" ? (
+        <h1 className="text-yellow-500  font-extrabold text-3xl mt-4">
+          Felicitaciones!
+        </h1>
+      ) : result === "lose" ? (
+        <h1 className="text-yellow-500  font-extrabold text-3xl mt-4">
+          La palabra era:{" "}
+          <span className="text-4xl text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-sky-700">
+            {word}
+          </span>
+        </h1>
+      ) : (
+        ""
+      )}
 
       <Toaster
         toastOptions={{
           position: "top-center",
           duration: 2500,
           style: {
-            backgroundColor: "#EAB308",
-            color: "#fff",
+            color: "#111827",
             fontSize: "1.4rem",
             fontWeight: "bold",
             textTransform: "uppercase",
