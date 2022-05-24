@@ -1,0 +1,10 @@
+.heart-life {
+  background-image: url("../assets/corazon.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin: 0rem auto 0.8rem auto;
+  line-height: 3.2rem;
+}
